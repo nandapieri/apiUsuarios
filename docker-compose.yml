@@ -2,7 +2,7 @@ version: '3'
 
 services:
   server:
-    container_name: NODEJS_SERVER_MEDIUM
+    container_name: server
     build: '.'
     volumes:
       - ./:/node-app
@@ -18,8 +18,8 @@ services:
 
   db:
     image: 'mongo'
-    container_name: MONGODB_MEDIUM
+    container_name: mongodb
     ports:
-      - '27017:27017'
+      - '27018:27018'
     volumes:
       - ./data/db:/data/db

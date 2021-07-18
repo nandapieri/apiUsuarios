@@ -12,4 +12,5 @@ COPY . .
 
 EXPOSE 9000
 
-CMD nodemon -L --watch . index.js
+ENTRYPOINT [ "npm" ]
+CMD [ "start" ]

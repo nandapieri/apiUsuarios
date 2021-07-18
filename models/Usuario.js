@@ -11,9 +11,59 @@ const usuarioSchema = new Schema({
     type: String,
     require: true
   },
-  criadoEm: {
-    type: Date,
-    default: Date.now
+  usuario: {
+    type: String,
+    require: true
+  },
+  telefone: {
+    type: String,
+    require: false
+  },
+  website : {
+    type: String,
+    require: false
+  },
+  empresa: {
+    nome: {
+      type: String,
+      require: false
+    },
+    frase: {
+      type: String,
+      require: false
+    },
+    ramo: {
+      type: String,
+      require: false
+    }
+  },
+  endereco: {
+    logradouro: {
+      type: String,
+      require: false
+    },
+    complemento: {
+      type: String,
+      require: false
+    },
+    cidade: {
+      type: String,
+      require: false
+    },
+    cep: {
+      type: String,
+      require: false
+    },
+    geo: {
+      lat : {
+        type: String,
+        require: false
+      },
+      lng: {
+        type: String,
+        require: false
+      },
+    }
   }
 });
 
