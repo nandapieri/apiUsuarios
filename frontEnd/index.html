@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Usuarios App</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+  </head>
+  <body onload="javascript:carregarLista()">
+    <div class="input">
+        <h1>Cadastro de usuário</h1>
+
+        <p id="erro" class="erro"></p>
+        <label for="email">E-mail:*</label>
+        <input id="email" type="text" class="campo-txt">
+        <input id="buscar" type="submit" value="Buscar" class="btn" onclick="buscarDados()">
+
+        <label for="nome">Nome:*</label>
+        <input id="nome" type="text" class="campo-txt" disabled>
+        <label for="usuario">Usuário:*</label>
+        <input id="usuario" type="text" class="campo-txt" disabled>
+        <h2>Endereço:</h2>
+        <label for="logradouro">Logradouro:</label>
+        <input id="logradouro" type="text" class="campo-txt" disabled>  
+        <label for="complemento">Complemento:</label>
+        <input id="complemento" type="text" class="campo-txt" disabled>   
+        <label for="cidade">Cidade:</label>
+        <input id="cidade" type="text" class="campo-txt" disabled> 
+        <label for="cep">CEP:</label>
+        <input id="cep" type="text" class="campo-txt" disabled>   
+        <h4>Geo:</h4>
+        <label for="lat">Latitude:</label>
+        <input id="lat" type="text" class="campo-txt" disabled> 
+        <label for="lng">Longitude:</label>
+        <input id="lng" type="text" class="campo-txt" disabled> 
+        <label for="telefone">Telefone:</label>
+        <input id="telefone" type="text" class="campo-txt" disabled> 
+        <label for="website">Website:</label>
+        <input id="website" type="text" class="campo-txt" disabled> 
+        <h2>Empresa:</h2>
+        <label for="nomeEmpresa">Nome:</label>
+        <input id="nomeEmpresa" type="text" class="campo-txt" disabled> 
+        <label for="frase">Frase:</label>
+        <input id="frase" type="text" class="campo-txt" disabled> 
+        <label for="ramo">Ramo:</label>
+        <input id="ramo" type="text" class="campo-txt" disabled> 
+
+        <input id="buscar" type="submit" value="Salvar" class="btn" onclick="salvar()">
+        
+        <p id="p"></p>
+    </div>
+
+    <div class="view" id="view">
+        <h1>Lista de usuários</h1>
+        <p id="erroFiltro" class="erro"></p>
+        <p>Filtrar por:</p>
+        <select id="campoFiltro" class="campo-txt">
+            <option value="porNome">Nome</option>
+            <option value="porEmail">Email</option>
+        </select>
+        <input id="textoFiltro" type="text" class="campo-txt"> 
+        <input id="filtrar" type="submit" value="Filtrar" class="btn" onclick="filtrar()">
+        <input id="limparFiltro" type="submit" value="Limpar" class="btn" onclick="limparFiltro()">
+        <ul>
+            <div id="div0"></div>
+        </ul>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
