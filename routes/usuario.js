@@ -2,80 +2,81 @@ const express = require('express');
 const router = express.Router();
 const Joi = require('joi');
 const inputSchema = require('../schemas/inputSchema')
-
+const dbUsuario = require('../db/usuario')
 const Usuario = require('../models/Usuario');
 const { rawListeners } = require('..');
 
 // Retorna um array com todos os documentos do banco de dados
-router.get('/', (req, res) => {
-  Usuario.find()
-    .then(usuarios => {
-      res.status(200).json(usuarios);
-    })
-    .catch(error => 
-      res.status(500).json(error));
+router.get('/', async (req, res) => {
+  
+  try {
+    await dbUsuario.listarUsuarios()
+      .then((usuarios) => {
+        res.status(200).json(usuarios);
+      })
+      
+  } catch(error) {
+    res.status(500).json({message: error});
+  }
 });
 
 //encontra um usuário por email
-router.post('/buscar', (req, res) => {
-  Usuario.findOne({ email: req.body.email })
-    .then(usuario => {
-      if(usuario)
+router.post('/buscar', async (req, res) => {
+
+  try {
+    if(req.body.email) {
+      await dbUsuario.buscarPorEmail(req.body.email)
+      .then((usuario) => {
         res.status(200).json(usuario);
-      else {
-        res.status(404).json({ message: "usuário não encontrado"});
-        }
-      }        
-    )
-    .catch(error => 
-      res.status(500).json(error));
+      })
+    } else {
+      res.status(400).json({message: "email is required"});
+    }
+  } catch(error) {
+      res.status(500).json({message: error});
+  }
 });
 
 // Cria um novo documento e salva no banco
 router.post('/novo', async (req, res) => {
-
+  const validaDados = await inputSchema.validateAsync(req.body);
+  const novoUsuario = new Usuario(req.body);
   try {
-    const validaDados = await inputSchema.validateAsync(req.body);
-    const novoUsuario = new Usuario(req.body);
-    novoUsuario
-    .save()
-    .then(result => {
-      res.status(201).json(result);
-    })
-    .catch(error => {
-      res.status(500).json(error);
-    });
+     await dbUsuario.criarUsuario(novoUsuario)
+      .then((usuario) => {
+        res.status(200).json(usuario);
+      })
+  } catch(error) {
+      res.status(400).json({message: error});
   }
-  catch (err) { 
-    res.status(400).json(err.details);
-  }
-   
 });
 
 // Atualiza dados de um usuário já existente
 router.put('/editar/:id', async (req, res) => {
+  const validaDados = await inputSchema.validateAsync(req.body);
+  const novosDados = req.body;
   try {
-    const validaDados = await inputSchema.validateAsync(req.body);
-    const novosDados = req.body;
-    Usuario.findOneAndUpdate({ _id: req.params.id }, novosDados, { new: true })
-    .then(usuario => {
-      res.status(200).json(usuario);
-    })
-    .catch(error => res.status(500).json(error));
+    await dbUsuario.editarUsuario(req.params.id,novosDados)
+     .then((usuario) => {
+       res.status(200).json(usuario);
+     })
+  } catch(error) {
+      res.status(400).json({message: error});
   }
-  catch (err) { 
-    res.status(400).json(err.details);
-  }
-  
 });
 
 // Apagar um usuario do banco de dados
-router.delete('/delete/:id', (req, res) => {
-  Usuario.findOneAndDelete({ _id: req.params.id })
-    .then(usuario => {
-      res.status(200).json(usuario);
-    })
-    .catch(error => res.status(500).json(error));
+router.delete('/delete/:id', async (req, res) => {
+  try {
+    if(req.params.id) {
+        await dbUsuario.apagarUsuario(req.params.id)
+      .then((usuario) => {
+        res.status(200).json(usuario);
+      })
+    }
+  } catch(error) {
+      res.status(400).json({message: error});
+  }
 });
 
 

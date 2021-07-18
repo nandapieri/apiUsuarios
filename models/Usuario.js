@@ -1,6 +1,8 @@
 
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const db = require('../db/db')
+const connect = async () => await db.connect();
 
 const usuarioSchema = new Schema({
   email: {
