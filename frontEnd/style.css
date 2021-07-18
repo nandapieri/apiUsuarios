@@ -72,8 +72,9 @@
     display: block;
     margin: 5px;
     margin-right: 100px;
-    
+    text-align: center;
     justify-content: flex-end;
+    
   }
 
   .user p {
