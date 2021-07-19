@@ -96,4 +96,10 @@
       display: block;
   }
 
-  
+  .pageNum {
+    display: none;
+    text-decoration: underline;
+    margin-bottom: 20px;
+    margin-left: 6px;
+    margin-right: 5px;
+  }

@@ -112,6 +112,143 @@ function buscarDados() {
         })  
   }
 
+  function decrementaPag() {
+    pag = parseInt(document.getElementById("pageNum").value)
+    pag--;
+    document.getElementById("pageNum").value = pag.toString()
+    paginar();
+  }
+
+  function incrementaPag() {
+    pag = parseInt(document.getElementById("pageNum").value)
+    pag++;
+    document.getElementById("pageNum").value = pag.toString()
+    paginar();
+  }
+
+  function limparLi() {
+    var ul = document.getElementById("lista");
+    var c = Array.prototype.slice.call(ul.getElementsByClassName("user"));
+    c.forEach(child => {
+            console.log(child.className)
+            ul.removeChild(child);
+    })
+  }
+
+  async function paginar() {
+    
+    var pag = parseInt(document.getElementById("pageNum").value)
+    if(pag > 1) limparLi();
+
+    const lista = await carregarListaNovo().then((l) => {
+        try {
+            return l;
+        } catch(e) {
+            console.log(e)
+        }
+    })
+    
+    var exibirProximo = (lista.length > 4*pag)
+    var exibirAnterior = (pag > 1);
+
+    console.log(pag)
+
+    exibir = lista.slice(4*(pag-1),4*pag);
+    console.log("Prox"+exibirProximo)
+    console.log("Anterior"+exibirAnterior)
+
+    console.log(exibir)
+
+    exibir.forEach((user) => {
+        var divNova = document.createElement("li");
+        divNova.className = "user";
+        divNova.setAttribute('id', user._id);
+        
+        var conteudoNome = document.createElement("P");
+        var labelNome = "<label>Nome: </label>"
+        conteudoNome.innerHTML = labelNome+user.nome
+        conteudoNome.setAttribute('class', "porNome");
+        divNova.appendChild(conteudoNome); 
+
+
+        var conteudoEmail = document.createElement("P");
+        var labelEmail = "<label>E-mail: </label>"
+        conteudoEmail.innerHTML = labelEmail+user.email
+        conteudoEmail.setAttribute('class', "porEmail");
+        divNova.appendChild(conteudoEmail);
+        
+        var conteudoUsuario = document.createElement("P");
+        var labelUsuario = "<label>Usuário: </label>"
+        conteudoUsuario.innerHTML = labelUsuario+user.usuario
+        divNova.appendChild(conteudoUsuario);
+
+        var conteudoEndereco = document.createElement("P");
+        var labelEndereco = "<label>Endereço: </label>"
+        conteudoEndereco.innerHTML = labelEndereco+user.endereco.logradouro
+            +", "+user.endereco.complemento
+            +" - "+user.endereco.cidade
+            +", "+user.endereco.cep
+        divNova.appendChild(conteudoEndereco);
+
+        var conteudoTelefone = document.createElement("P");
+        var labelTelefone = "<label>Telefone: </label>"
+        conteudoTelefone.innerHTML = labelTelefone+user.telefone
+        divNova.appendChild(conteudoTelefone);
+
+        var conteudoSite = document.createElement("P");
+        var labelSite = "<label>Site: </label>"
+        conteudoSite.innerHTML = labelSite+user.website
+        divNova.appendChild(conteudoSite);
+
+        var conteudoEmpresa = document.createElement("P");
+        var labelEmpresa = "<label>Empresa: </label>"
+        conteudoEmpresa.innerHTML = labelEmpresa+user.empresa.nome
+        divNova.appendChild(conteudoEmpresa);
+
+        var btnNovo = document.createElement("BUTTON");
+        btnNovo.innerHTML = "Apagar"
+        btnNovo.setAttribute('id', user._id);
+        btnNovo.setAttribute('type', "submit");
+        btnNovo.setAttribute('class', "btn");
+        btnNovo.setAttribute('onclick', "apagar(this.id)");
+        divNova.appendChild(btnNovo); 
+
+        var divAtual = document.getElementById("div0");
+        divAtual.parentNode.insertBefore(divNova, divAtual);   
+    })
+
+    if(exibirProximo) document.getElementById("proximo").style.display = "inline-block";
+    else document.getElementById("proximo").style.display = "none";
+    if(exibirAnterior) document.getElementById("anterior").style.display = "inline-block";
+    else document.getElementById("anterior").style.display = "none";
+
+  }
+
+  function carregarListaNovo() {
+    try {
+
+        return new Promise((resolve, reject) => {
+            fetch('http://localhost:9000/api/usuarios/')
+                .then(response => response.json())
+                .then((usuarios) => {
+                    
+                    if(usuarios) {
+                        resolve(usuarios);  
+                    } else {
+                        reject("Lista não encontrada")
+                    }
+                })
+                .catch(error => {
+                    reject(error);
+                })
+        })
+
+        
+    } catch(e) {
+        console.log(e);
+    }
+  }
+
   function carregarLista() {
     try {
 

@@ -6,7 +6,7 @@
     <title>Usuarios App</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
   </head>
-  <body onload="javascript:carregarLista()">
+  <body onload="javascript:paginar()">
     <div class="input" id="divInput">
         <h1>Cadastro de usuário</h1>
 
@@ -61,9 +61,12 @@
         <input id="textoFiltro" type="text" class="campo-txt"> 
         <input id="filtrar" type="submit" value="Filtrar" class="btn" onclick="filtrar()">
         <input id="limparFiltro" type="submit" value="Limpar" class="btn" onclick="limparFiltro()">
-        <ul>
+        <ul id="lista">
             <div id="div0"></div>
+            <input id="pageNum" class="pageNum" value="1">
         </ul>
+        <a onclick="decrementaPag()" href="#" class="pageNum" id="anterior">Página Anterior</a>
+        <a onclick="incrementaPag()" href="#" class="pageNum" id="proximo">Próxima Página</a>
     </div>
     <script src="script.js"></script>
   </body>
