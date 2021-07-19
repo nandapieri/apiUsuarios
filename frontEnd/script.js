@@ -117,23 +117,6 @@ function buscarDados() {
         })  
   }
 
-  function limpaForm() {
-    document.getElementById("email").value = "";
-    document.getElementById("nome").value = "";
-    document.getElementById("usuario").value = "";
-    document.getElementById("logradouro").value = "";
-    document.getElementById("complemento").value = "";
-    document.getElementById("cidade").value = "";
-    document.getElementById("cep").value = "";
-    document.getElementById("lat").value = "";
-    document.getElementById("lng").value = "";
-    document.getElementById("telefone").value = "";
-    document.getElementById("website").value = "";
-    document.getElementById("nomeEmpresa").value = "";
-    document.getElementById("frase").value = "";
-    document.getElementById("ramo").value = "";
-  }
-
   function carregarLista() {
     try {
 
@@ -163,6 +146,29 @@ function buscarDados() {
                 var labelUsuario = "<label>Usuário: </label>"
                 conteudoUsuario.innerHTML = labelUsuario+user.usuario
                 divNova.appendChild(conteudoUsuario);
+
+                var conteudoEndereco = document.createElement("P");
+                var labelEndereco = "<label>Endereço: </label>"
+                conteudoEndereco.innerHTML = labelEndereco+user.endereco.logradouro
+                    +", "+user.endereco.complemento
+                    +" - "+user.endereco.cidade
+                    +", "+user.endereco.cep
+                divNova.appendChild(conteudoEndereco);
+
+                var conteudoTelefone = document.createElement("P");
+                var labelTelefone = "<label>Telefone: </label>"
+                conteudoTelefone.innerHTML = labelTelefone+user.telefone
+                divNova.appendChild(conteudoTelefone);
+
+                var conteudoSite = document.createElement("P");
+                var labelSite = "<label>Site: </label>"
+                conteudoSite.innerHTML = labelSite+user.website
+                divNova.appendChild(conteudoSite);
+
+                var conteudoEmpresa = document.createElement("P");
+                var labelEmpresa = "<label>Empresa: </label>"
+                conteudoEmpresa.innerHTML = labelEmpresa+user.empresa.nome
+                divNova.appendChild(conteudoEmpresa);
 
                 var btnNovo = document.createElement("BUTTON");
                 btnNovo.innerHTML = "Apagar"
