@@ -68,18 +68,16 @@ router.put('/editar/:id', async (req, res) => {
 // Apagar um usuario do banco de dados
 router.delete('/delete/:id', async (req, res) => {
   try {
-    if(req.params.id) {
-        await dbUsuario.apagarUsuario(req.params.id)
+    
+    await dbUsuario.apagarUsuario(req.params.id)
       .then((usuario) => {
         res.status(200).json(usuario);
       })
       .catch(error => {
         res.status(404).json(error);
       })
-    }
-    else {
-      res.status(400).json({message: "Bad request"});
-    }
+    
+    
   } catch(error) {
       res.status(400).json({message: error});
   }

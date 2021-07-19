@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --testEnvironment=node --runInBand",
+    "test": "jest --testEnvironment=node --runInBand --coverage",
     "start": "nodemon -L --watch . index.js"
   },
   "repository": {
