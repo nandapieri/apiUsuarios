@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const Joi = require('joi');
 const inputSchema = require('../schemas/inputSchema')
+const inputSchemaUpdate = require('../schemas/inputSchemaUpdate')
 const dbUsuario = require('../db/usuario')
 const Usuario = require('../models/Usuario');
 
@@ -52,7 +52,7 @@ router.post('/novo', async (req, res) => {
 // Atualiza dados de um usuário já existente
 router.put('/editar/:id', async (req, res) => {
   try {
-      const validaDados = await inputSchema.validateAsync(req.body);
+      const validaDados = await inputSchemaUpdate.validateAsync(req.body);
       const novosDados = req.body;
       await dbUsuario.editarUsuario(req.params.id,novosDados)
       .then((usuario) => {

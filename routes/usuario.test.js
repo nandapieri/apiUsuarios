@@ -3,6 +3,7 @@ const db = require('../db/db')
 const usuariodb = require('../db/usuario')
 const app = require('../app');
 const mongoose = require('mongoose');
+const inputSchema = require('../schemas/inputSchema')
 
 beforeAll(async () => {
   await db.connect()
@@ -51,7 +52,7 @@ describe('rota Post - buscar por email', () => {
     }
     await usuariodb.criarUsuario(user)
     const body = {
-      email: "teste@teste.com"
+      email: "asdsdasa@teste.com"
     }
     await supertest(app).post('/api/usuarios/buscar').send(body)
         .then(response => {
@@ -98,6 +99,17 @@ describe('rota Post - novo usuário', () => {
           expect(response.statusCode).toEqual(400);  
         })    
   })
+
+  it('erro', async () => {
+    const user = {
+      nome: "Leanne Graham",	
+      usuario: 12347
+    }
+    await supertest(app).post('/api/usuarios/novo').send(user)    
+      .then(response => {
+          expect(response.statusCode).toEqual(400);  
+        })    
+  })
 })
 
 describe('rota Put', () => {
@@ -109,8 +121,7 @@ describe('rota Put', () => {
     }
     const newUser = {
         nome: "teste",	
-        usuario: "teste",
-        email: "teste@teste.com"
+        usuario: "teste"
     }
     const created = await usuariodb.criarUsuario(user);
     const id = created._id;
@@ -120,7 +131,7 @@ describe('rota Put', () => {
           expect(response.statusCode).toEqual(200);  
           expect(response.body).toHaveProperty('nome',newUser.nome);
           expect(response.body).toHaveProperty('usuario',newUser.usuario);
-          expect(response.body).toHaveProperty('email',newUser.email);
+          
         })    
   })
   it('id não encontrado', async () => {
@@ -132,14 +143,35 @@ describe('rota Put', () => {
     const newUser = {
         nome: "teste",	
         usuario: "teste",
-        email: "teste@teste.com"
+        email: "teste"
     }
     const created = await usuariodb.criarUsuario(user);
     const id = "50f3a811b9f6c91610f8eac0"
     const url = '/api/usuarios/editar/'+id;
-    await supertest(app).post(url).send(newUser)
+    await supertest(app).put(url).send(newUser)
         .then(response => {
           expect(response.statusCode).toEqual(404);  
+        })    
+  })
+
+  it('erro', async () => {
+    const user = {
+      nome: "Leanne Graham",	
+      usuario: "Bret",
+      email: "Sincere@april.biz"
+    }
+    const newUser = {
+        nome: "teste",	
+        usuario: "teste",
+        email: 121231
+    }
+    const created = await usuariodb.criarUsuario(user);
+    const id = created._id;
+    const url = '/api/usuarios/editar/'+id;
+    
+    await supertest(app).put(url).send(newUser)    
+      .then(response => {
+          expect(response.statusCode).toEqual(400);  
         })    
   })
 }) 

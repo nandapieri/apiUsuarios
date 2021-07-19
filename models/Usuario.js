@@ -2,9 +2,6 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
-const db = require('../db/db')
-const connect = async () => await db.connect();
-
 const usuarioSchema = new Schema({
   email: {
     type: String,
@@ -70,4 +67,4 @@ const usuarioSchema = new Schema({
   }
 });
 
-module.exports = module.exports =  mongoose.model('usuarios', usuarioSchema);
+module.exports =  mongoose.model('usuarios', usuarioSchema);
