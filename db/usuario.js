@@ -2,8 +2,6 @@ const inputSchema = require('../schemas/inputSchema')
 const Usuario = require('../models/Usuario');
 const db = require('./db')
 
-
-
 module.exports.listarUsuarios = async  () => {
     return new Promise((resolve, reject) => {
         Usuario.find()

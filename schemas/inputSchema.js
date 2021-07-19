@@ -1,24 +1,24 @@
-const joi = require('joi');
+const Joi = require('joi');
 
-module.exports = joi.object({
-  nome: joi.string().required(),
-  usuario: joi.string().required(),
-  email: joi.string().required(),
+module.exports = Joi.object({
+  nome: Joi.string().required(),
+  usuario: Joi.string().required(),
+  email: Joi.string().required(),
   endereco: {
-    logradouro: joi.string(),
-    complemento: joi.string(),
-    cidade: joi.string(),
-    cep: joi.string(),
+    logradouro: Joi.string(),
+    complemento: Joi.string(),
+    cidade: Joi.string(),
+    cep: Joi.string(),
     geo: {
-      lat: joi.string(),
-      lng: joi.string(),
+      lat: Joi.string(),
+      lng: Joi.string(),
     }
   },
-  telefone: joi.string(),
-  website: joi.string(),
+  telefone: Joi.string(),
+  website: Joi.string(),
   empresa: {
-    nome: joi.string(),
-    frase: joi.string(),
-    ramo: joi.string(),
+    nome: Joi.string(),
+    frase: Joi.string(),
+    ramo: Joi.string(),
   }
 });

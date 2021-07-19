@@ -1,46 +1,175 @@
-/*jest.setTimeout(30000);
 const supertest = require('supertest');
-const app = require('../index');
+const db = require('../db/db')
+const usuariodb = require('../db/usuario')
+const app = require('../app');
+const mongoose = require('mongoose');
 
-//mockar sucesso!
+beforeAll(async () => {
+  await db.connect()
+    .then(() => {
+      app.listen(5000, () => console.log('Server ativo na porta 5000'));
+    })
+ })
+afterEach(async () => await db.clearDatabase())
+afterAll(async () => await db.closeDatabase())
+
+jest.setTimeout(30000);
 describe('rota Get', () => {
-   /* it('sucesso', async () => {
-  
-      const response = await supertest(app).get('/');
-
-      expect(response.statusCode).toEqual(200);  
-    });
-
-    it('dados não encontrados', async () => {
-  
-        const response = await supertest(app).get('/');
-  
-        expect(response.statusCode).toEqual(404);  
-      });
-  
-  });
-
-  describe('rota post', () => {
-       
-      
-      it('sucesso', async () => {
-        const paramValidos = {
-            nome: "fernanda",
-            email: "nandapieri@gmail.com",
-            usuario: "fernanda"
-        }
-        const response = await supertest(app).post('/novo').send(paramValidos);
-  
-        expect(response.statusCode).toEqual(201);  
-      });
-
-      it('parametros invalidos', async () => {
-        const paramInvalidos = {
-            nome: "fernanda"
-        } 
-        const response = await supertest(app).post('/novo').send(paramInvalidos);
-  
-        expect(response.statusCode).toEqual(400);  
-    });
+   it('sucesso', async () => {
+    
+    await supertest(app).get('/api/usuarios/')
+        .then(response => {
+          expect(response.statusCode).toEqual(200);  
+        })    
   })
-  */
+})  
+
+describe('rota Post - buscar por email', () => {
+  it('sucesso', async () => {
+    const user = {
+      nome: "Leanne Graham",	
+      usuario: "Bret",
+      email: "Sincere@april.biz"
+    }
+    await usuariodb.criarUsuario(user)
+    const body = {
+      email: "Sincere@april.biz"
+    }
+    await supertest(app).post('/api/usuarios/buscar').send(body)
+        .then(response => {
+          expect(response.statusCode).toEqual(200);  
+          expect(response.body).toHaveProperty('nome',user.nome);
+          expect(response.body).toHaveProperty('usuario',user.usuario);
+          expect(response.body).toHaveProperty('email',user.email);
+        })    
+  })
+  it('email não encontrado', async () => {
+    const user = {
+      nome: "Leanne Graham",	
+      usuario: "Bret",
+      email: "Sincere@april.biz"
+    }
+    await usuariodb.criarUsuario(user)
+    const body = {
+      email: "teste@teste.com"
+    }
+    await supertest(app).post('/api/usuarios/buscar').send(body)
+        .then(response => {
+          expect(response.statusCode).toEqual(404);  
+        })    
+  })
+
+  it('request inválida', async () => {
+    const user = {
+      nome: "Leanne Graham",	
+      usuario: "Bret",
+      email: "Sincere@april.biz"
+    }
+    await usuariodb.criarUsuario(user)
+    await supertest(app).post('/api/usuarios/buscar').send()
+        .then(response => {
+          expect(response.statusCode).toEqual(400);  
+        })    
+  })
+}) 
+
+describe('rota Post - novo usuário', () => {
+  it('sucesso', async () => {
+    const user = {
+      nome: "Leanne Graham",	
+      usuario: "Bret",
+      email: "Sincere@april.biz"
+    }
+    await supertest(app).post('/api/usuarios/novo').send(user)
+        .then(response => {
+          expect(response.statusCode).toEqual(201);  
+          expect(response.body).toHaveProperty('nome',user.nome);
+          expect(response.body).toHaveProperty('usuario',user.usuario);
+          expect(response.body).toHaveProperty('email',user.email);
+        })    
+  })
+  it('erro', async () => {
+    const user = {
+      nome: "Leanne Graham",	
+      usuario: "Bret"
+    }
+    await supertest(app).post('/api/usuarios/novo').send(user)
+        .then(response => {
+          expect(response.statusCode).toEqual(400);  
+        })    
+  })
+})
+
+describe('rota Put', () => {
+  it('sucesso', async () => {
+    const user = {
+      nome: "Leanne Graham",	
+      usuario: "Bret",
+        email: "Sincere@april.biz"
+    }
+    const newUser = {
+        nome: "teste",	
+        usuario: "teste",
+        email: "teste@teste.com"
+    }
+    const created = await usuariodb.criarUsuario(user);
+    const id = created._id;
+    const url = '/api/usuarios/editar/'+id;
+    await supertest(app).put(url).send(newUser)
+        .then(response => {
+          expect(response.statusCode).toEqual(200);  
+          expect(response.body).toHaveProperty('nome',newUser.nome);
+          expect(response.body).toHaveProperty('usuario',newUser.usuario);
+          expect(response.body).toHaveProperty('email',newUser.email);
+        })    
+  })
+  it('id não encontrado', async () => {
+    const user = {
+      nome: "Leanne Graham",	
+      usuario: "Bret",
+      email: "Sincere@april.biz"
+    }
+    const newUser = {
+        nome: "teste",	
+        usuario: "teste",
+        email: "teste@teste.com"
+    }
+    const created = await usuariodb.criarUsuario(user);
+    const id = "50f3a811b9f6c91610f8eac0"
+    const url = '/api/usuarios/editar/'+id;
+    await supertest(app).post(url).send(newUser)
+        .then(response => {
+          expect(response.statusCode).toEqual(404);  
+        })    
+  })
+}) 
+
+describe('rota Delete', () => {
+  it('sucesso', async () => {
+    const user = {
+      nome: "Leanne Graham",	
+      usuario: "Bret",
+      email: "Sincere@april.biz"
+    }
+    
+    const created = await usuariodb.criarUsuario(user);
+    const id = created._id;
+    const url = '/api/usuarios/delete/'+id;
+    await supertest(app).delete(url).send()
+        .then(response => {
+          expect(response.statusCode).toEqual(200);  
+          expect(response.body).toHaveProperty('nome',user.nome);
+          expect(response.body).toHaveProperty('usuario',user.usuario);
+          expect(response.body).toHaveProperty('email',user.email);
+        })    
+  })
+  it('id não encontrado', async () => {
+    
+    const id = "50f3a811b9f6c91610f8eac0"
+    const url = '/api/usuarios/editar/'+id;
+    await supertest(app).delete(url).send()
+        .then(response => {
+          expect(response.statusCode).toEqual(404);  
+        })    
+  })
+}) 
