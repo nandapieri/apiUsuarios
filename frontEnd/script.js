@@ -8,21 +8,13 @@ function buscarDados() {
         validarEmail(email)
     )
     if (!validar) return false
-    
-    document.getElementById("nome").disabled = false;
-    document.getElementById("usuario").disabled = false;
-    document.getElementById("logradouro").disabled = false;
-    document.getElementById("complemento").disabled = false;
-    document.getElementById("cidade").disabled = false;
-    document.getElementById("cep").disabled = false;
-    document.getElementById("lat").disabled = false;
-    document.getElementById("lng").disabled = false;
-    document.getElementById("telefone").disabled = false;
-    document.getElementById("website").disabled = false;
-    document.getElementById("nomeEmpresa").disabled = false;
-    document.getElementById("frase").disabled = false;
-    document.getElementById("ramo").disabled = false;    
-    
+
+    var c = document.getElementById("divInput").childNodes;
+    c.forEach(child => {
+        if(child.className === "campo-txt")
+            child.disabled = false;
+    })
+
     try {
 
         fetch('https://jsonplaceholder.typicode.com/users')
@@ -31,6 +23,8 @@ function buscarDados() {
             
             const usuarioApi = json.find(user => user.email.toLowerCase() === email.toLowerCase());
             if (usuarioApi) {
+
+                
                 document.getElementById("nome").value = usuarioApi.name
                 document.getElementById("usuario").value = usuarioApi.username
                 document.getElementById("logradouro").value = usuarioApi.address.street
@@ -44,6 +38,7 @@ function buscarDados() {
                 document.getElementById("nomeEmpresa").value = usuarioApi.company.name
                 document.getElementById("frase").value = usuarioApi.company.catchPhrase
                 document.getElementById("ramo").value = usuarioApi.company.bs
+                
             }
             //document.getElementById("p").innerHTML = JSON.stringify(usuarioApi);
             
