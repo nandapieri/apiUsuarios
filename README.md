@@ -37,17 +37,23 @@ Para rodar esse projeto é necessário ter instalados o Node.js, o Docker e o Do
 
 * Navegue até a pasta do projeto via terminal e baixe as dependencias:
 ```
-  $ npm init
+  $ npm i
 ```
 
-* Suba os containers e o servidor:
+* Com o Docker-compose rodando, suba os containers e o servidor:
 ```
   $ docker-compose up
 ```
 
-* Em uma outra janela do terminal, suba a aplicação cliente:
+* Em uma outra janela do terminal, navege até a pasta frontEnd dentro do projeto e suba a aplicação cliente:
 ```
   $ http-server
+```
+
+* Em caso de erro no passo anterior instale o http-server e rode:
+```
+  $ sudo npm i http-server -g
+  $ http-server -o
 ```
 
 * Acesse o link da aplicação cliente exibido no terminal. Exemplo:

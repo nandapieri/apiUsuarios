@@ -29,7 +29,7 @@ function buscarDados() {
         .then(response => response.json())
         .then((json) => {
             
-            const usuarioApi = json.find(user => user.email === email);
+            const usuarioApi = json.find(user => user.email.toLowerCase() === email.toLowerCase());
             if (usuarioApi) {
                 document.getElementById("nome").value = usuarioApi.name
                 document.getElementById("usuario").value = usuarioApi.username
