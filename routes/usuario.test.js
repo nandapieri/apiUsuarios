@@ -1,4 +1,4 @@
-jest.setTimeout(30000);
+/*jest.setTimeout(30000);
 const supertest = require('supertest');
 const app = require('../index');
 
@@ -10,7 +10,7 @@ describe('rota Get', () => {
 
       expect(response.statusCode).toEqual(200);  
     });
-*/
+
     it('dados não encontrados', async () => {
   
         const response = await supertest(app).get('/');
@@ -43,4 +43,4 @@ describe('rota Get', () => {
         expect(response.statusCode).toEqual(400);  
     });
   })
-  
+  */

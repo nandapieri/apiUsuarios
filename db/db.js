@@ -1,25 +1,33 @@
+const { MongoMemoryServer } = require("mongodb-memory-server");
 const mongoose = require('mongoose');
-const { MongoMemoryServer } = require('mongodb-memory-server');
 
-const mongod = new MongoMemoryServer();
+
+function create() {
+    const mongo = new MongoMemoryServer()
+    return mongo;
+}
+
+const mongod = create();
 
 module.exports.connect = async () => {
-    const uri = await mongod.getUri();
-    //const uri = 'mongodb://localhost:27017/crud-node-mongo-docker';
+    await mongod.start();
+    const uri = mongod.getUri()
     mongoose.connect(uri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-        useFindAndModify: false
-      })
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useFindAndModify: false
+    })
     .then(result => {
       console.log('MongoDB Conectado');
     })
     .catch(error => {
       console.log(error);
-    });
+    })
+  
+    //const uri = 'mongodb://localhost:27017/crud-node-mongo-docker';
 }
 
-module.exports.closeConnection = async () => {
+module.exports.closeDatabase = async () => {
     await mongoose.connection.dropDatabase();
     await mongoose.connection.close();
     await mongod.stop();
