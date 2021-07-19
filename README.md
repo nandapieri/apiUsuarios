@@ -51,3 +51,9 @@ $ git clone https://github.com/nandapieri/apiUsuarios.git
 ```
 
 * Acesse o link da aplicação cliente exibido no terminal.
+Ex: Starting up http-server, serving ./
+    Available on:
+    http://127.0.0.1:8080
+    http://192.168.1.121:8080
+    http://172.17.0.1:8080
+    http://172.20.0.1:8080
